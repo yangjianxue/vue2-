@@ -81,28 +81,32 @@ export default{
 * 计算属性常用于模板内点简单计算，太多的逻辑反而使模板过重且难以维护
 	> {{msg.split('').reverse().join('')}}   --不推荐
 	> 推荐写法
-		>	//计算属性
-			computed:{
-				//计算属性的 getter
-				reverseName:function(){
-					//this 指向当前 Vue 实例 
-					return this.name.split('').reverse().join('')
-				}
-			},
-			//调用计算属性
-			<p>{{reverseName}}</p>
+	```
+	//计算属性
+	computed:{
+		//计算属性的 getter
+		reverseName:function(){
+			//this 指向当前 Vue 实例 
+			return this.name.split('').reverse().join('')
+		}
+	},
+	//调用计算属性
+	<p>{{reverseName}}</p>
+	```
 	> 推荐写法2 （写成方法）
-		>	//方法
-			methods:{
-				changeColor:function(){
-					this.isMyClass = !this.isMyClass
-				},
-				reverseName1:function(){
-					return this.name.split('').reverse().join('')
-				}
-			}
-			//调用计算属性方法（方法的调用模式）
-			<p>{{reverseName1()}}</p>
+	```
+	//方法
+	methods:{
+		changeColor:function(){
+			this.isMyClass = !this.isMyClass
+		},
+		reverseName1:function(){
+			return this.name.split('').reverse().join('')
+		}
+	}
+	//调用计算属性方法（方法的调用模式）
+	<p>{{reverseName1()}}</p>
+	```
 	> 方法与计算属性的区别：
 		> 计算属性 ：是基于他们的依赖进行缓存的，只要相关依赖不改变，多次访问计算属性会立即返回之前的计算结果
 		> 方法 ：是只要触发重新渲染时，调用方法 总会再次执行函数
@@ -112,15 +116,16 @@ export default{
 	> 功能：观察和响应 Vue实例上的数据变动（当一些数据需要随着其他数据变动而发生变动的时候）
 	> 注: 官方并不推荐使用 watch,而推荐使用 计算属性代替侦听属性
 	>推荐用法：
-
-		//计算属性
-		computed:{
-			fullName1:function(){
-				return this.firstName + " " + this.lastName
-			}
-		},
-		//调用计算属性
-		<div>我是计算属性值{{fullName1}}</div>
+	```
+	//计算属性
+	computed:{
+		fullName1:function(){
+			return this.firstName + " " + this.lastName
+		}
+	},
+	//调用计算属性
+	<div>我是计算属性值{{fullName1}}</div>
+	```
 	> watch/computed 完整对比代码		
 ```
 <template>
@@ -186,17 +191,20 @@ export default{
 	> class名可以加引号或者不加引号
 
 		* 单纯点为标签添加redClass这个class
-			> <span class="redClass font24">我是v-bind:class</span>
-
+		```
+		<span class="redClass font24">我是v-bind:class</span>
+		```
 		* 将数据对象定义在内联模板里 
 		> (redClass是否展示取决于 show是true还是false,font24/'text-danger'同理)
-			> <span v-bind:class="{redClass:show,font24:isMyClass,'text-danger':show}">我是v-bind:class</span>
-			> data(){return{show:true,isMyClass:false}}
-		
+		```
+		<span v-bind:class="{redClass:show,font24:isMyClass,'text-danger':show}">我是v-bind:class</span>
+		data(){return{show:true,isMyClass:false}}
+		```
 		* 将class绑定在一个返回对象的计算属性
-		> <span v-bind:class="classObject">我是v-bind:class</span>
-		> data() {return {show:true,error:null}}
-		>computed:{
+		```
+		<span v-bind:class="classObject">我是v-bind:class</span>
+		data() {return {show:true,error:null}}
+		computed:{
 			classObject:function(){
 				return {
 					redClass : this.show && !this.error,
@@ -204,11 +212,14 @@ export default{
 				}
 			}
 		}
+		```
 	* 数组语法 
 		* 为标签添加三目计算后的class
-			>	<div :class="[show ? 'redClass' :'blueClass','text-danger']">为div的class添加三目</div>
-			//当shou为true时 <div class="redClass text-danger">为div的class添加三目</div>
-			//当shou为false时 <div class="blueClass text-danger">为div的class添加三目</div>
+		```
+		<div :class="[show ? 'redClass' :'blueClass','text-danger']">为div的class添加三目</div>
+		```
+		> 当shou为true时 <div class="redClass text-danger">为div的class添加三目</div>
+		> 当shou为false时 <div class="blueClass text-danger">为div的class添加三目</div>
 
 	* 用在组件上
 		> 与用在普通标签上相同
@@ -216,24 +227,31 @@ export default{
 
 
 	### 处理内联样式 style
-	* 对象语法 v-bind:style="{color:activeColor,fontSize:fontSize + 'rem','background-color':'#eee'}"
+	* 对象语法 
+	```
+	v-bind:style="{color:activeColor,fontSize:fontSize + 'rem','background-color':'#eee'}"
 		> data(){return{activeColor:'rgba(255,0,0,0.5)',fontSize:0.3}}
-
+	```
 	* 绑定样式对象
-		> <div v-bind:style="styleObj">样式对象</div>	
-		> data(){retrun {sytleObj{color:'blue',fontSize:'0.4rem',lineHeight:'0.5rem'}}}
-	
+	```
+	<div v-bind:style="styleObj">样式对象</div>	
+	data(){retrun {sytleObj{color:'blue',fontSize:'0.4rem',lineHeight:'0.5rem'}}}
+	```
 	* 数组语法
 		> 可以将多个样式对象绑定到同一个元素上
-		> <div v-bind:style="[styleObj,styleObj1]">我是多个样式对象</div>		
-		> data(){return{ 
-			styleObj{color:'blue',fontSize:'0.4rem',lineHeight:'0.5rem'},
-			styleObj1{borderBottom:'0.02rem solid green'}
-		 }}
+	```
+	<div v-bind:style="[styleObj,styleObj1]">我是多个样式对象</div>		
+	data(){return{ 
+		styleObj{color:'blue',fontSize:'0.4rem',lineHeight:'0.5rem'},
+		styleObj1{borderBottom:'0.02rem solid green'}
+	 }}
+	```
 	* 多重值
 		> 2.3.0+及以上才支持
-		> <div :style="{display:['-webkit-box','-ms-flexbox','flex']}">我是style内联的多重值</div>
-			> 当浏览器支持不带前缀的flex时，内联样式显示为 <div style="display:flex">我是style内联的多重值</div>	
+		```
+		<div :style="{display:['-webkit-box','-ms-flexbox','flex']}">我是style内联的多重值</div>
+		```
+		 > 当浏览器支持不带前缀的flex时，内联样式显示为 <div style="display:flex">我是style内联的多重值</div>	
 
 
 
