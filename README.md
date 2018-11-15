@@ -233,10 +233,10 @@ export default{
 		* 为标签添加三目计算后的class
 		```
 		<div :class="[show ? 'redClass' :'blueClass','text-danger']">为div的class添加三目</div>
-		```
+		
 		> 当shou为true时 <div class="redClass text-danger">为div的class添加三目</div>
 		> 当shou为false时 <div class="blueClass text-danger">为div的class添加三目</div>
-
+		```
 	* 用在组件上
 		> 与用在普通标签上相同
 		> 如果标签和组件上都有class且满足显示条件，那会一起显示
