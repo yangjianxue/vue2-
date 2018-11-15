@@ -50,34 +50,48 @@ export default{
 
 # 指令
 * v-once : 能执行一次性的插值，当数据改变时，插值处点内容不会更新
-	>	<p v-once>{{name}}</p>
+	```
+	<p v-once>{{name}}</p>
+	```
 * v-text : 只能解析纯文本
-	>	<div v-text="data.data1"></div>
+	```
+	<div v-text="data.data1"></div>
+	```
 * v-html : 可以解析HTML(标签)
-	>	<div v-html="data.data2"></div>
+	```
+	<div v-html="data.data2"></div>
+	```
 * v-bind ： 绑定标签属性
-	>	<p v-bind:class="{redClass:isMyClass,blueClass:!isMyClass}" v-bind:title="show">{{show}} 
-	>	简写 (直接省略v-bind) 	
-		>	<p :class="{redClass:isMyClass,blueClass:!isMyClass}" :title="show">{{show}} 
-
+	```
+	<p v-bind:class="{redClass:isMyClass,blueClass:!isMyClass}" v-bind:title="show">{{show}} 
+	//简写 (直接省略v-bind) 	
+		<p :class="{redClass:isMyClass,blueClass:!isMyClass}" :title="show">{{show}} 
+	```
 ##	条件判断
 * v-if   :	相当于if
-	>	<p v-if="show">我是v-if 为true 时能被看到</p>
+	```
+	<p v-if="show">我是v-if 为true 时能被看到</p>
+	```
 * v-else : 常与v-if连用
-	>	<p v-else>我是v-if 为false 时能被看到</p>
+	```
+	<p v-else>我是v-if 为false 时能被看到</p>
+	```
 
 ##	监听DOM事件
 * v-on 	 : 参数是监听点事件名称
-	>	<input type="button" value="改变颜色" v-on:click="changeColor">
-	>	changeColor 定义在methods中（json格式）
-	>	简写 （将v-on简写成@）
-		>	<input type="button" value="改变颜色" @:click="changeColor">
-
+	```
+	<input type="button" value="改变颜色" v-on:click="changeColor">
+	changeColor 定义在methods中（json格式）
+	//简写 （将v-on简写成@）
+		<input type="button" value="改变颜色" @:click="changeColor">
+	```
 ##	修饰符
+```
 * .prevent    <==>  event.preventDefault()
-	>	<form v-on:submit.prevent="onSubmit"></form>
-
+	<form v-on:submit.prevent="onSubmit"></form>
+```
 ## 计算属性
+
 * 计算属性常用于模板内点简单计算，太多的逻辑反而使模板过重且难以维护
 	> {{msg.split('').reverse().join('')}}   --不推荐
 	> 推荐写法
