@@ -22,7 +22,9 @@ new Vue({
   * 官方写法
   render:function(createElement) { renturn createElement (App)}
   * 箭头函数的this是[指向] :包裹this所在函数外面的对象上
-  * h 是 createElement 的别名，createElement 是用来生成HTML DOM 元素 的脚本，h（Hyperscript）来自 HTML (hyper-text markup language : 超文本标记语言)   是vue生态系统的通用管理
+  * h 是 createElement 的别名，createElement 是用来生成HTML DOM 元素 的脚本，
+  * h（Hyperscript）来自 HTML (hyper-text markup language : 超文本标记语言)   
+  * 是vue生态系统的通用管理
   */
 })
 ```
