@@ -176,7 +176,64 @@ export default{
 
 
 ## class和style绑定
+* 因为class 和 style 都是属性，所以可以使用v-bind做处理
+
+	### 绑定class 
+
+	* 处理动态class 
+
+	* 对象语法 v-bind:class="{class名:数据属性,'class名':数据属性}"
+	> class名可以加引号或者不加引号
+
+		* 单纯点为标签添加redClass这个class
+			> <span class="redClass font24">我是v-bind:class</span>
+
+		* 将数据对象定义在内联模板里 
+		> (redClass是否展示取决于 show是true还是false,font24/'text-danger'同理)
+			> <span v-bind:class="{redClass:show,font24:isMyClass,'text-danger':show}">我是v-bind:class</span>
+			> data(){return{show:true,isMyClass:false}}
+		
+		* 将class绑定在一个返回对象的计算属性
+		> <span v-bind:class="classObject">我是v-bind:class</span>
+		> data() {return {show:true,error:null}}
+		>computed:{
+			classObject:function(){
+				return {
+					redClass : this.show && !this.error,
+					'text-danger':this.error && this.error.type === 'fatal'
+				}
+			}
+		}
+	* 数组语法 
+		* 为标签添加三目计算后的class
+			>	<div :class="[show ? 'redClass' :'blueClass','text-danger']">为div的class添加三目</div>
+			//当shou为true时 <div class="redClass text-danger">为div的class添加三目</div>
+			//当shou为false时 <div class="blueClass text-danger">为div的class添加三目</div>
+
+	* 用在组件上
+		> 与用在普通标签上相同
+		> 如果标签和组件上都有class且满足显示条件，那会一起显示
+
+
+	### 处理内联样式 style
+	* 对象语法 v-bind:style="{color:activeColor,fontSize:fontSize + 'rem','background-color':'#eee'}"
+		> data(){return{activeColor:'rgba(255,0,0,0.5)',fontSize:0.3}}
+
+	* 绑定样式对象
+		> <div v-bind:style="styleObj">样式对象</div>	
+		> data(){retrun {sytleObj{color:'blue',fontSize:'0.4rem',lineHeight:'0.5rem'}}}
 	
+	* 数组语法
+		> 可以将多个样式对象绑定到同一个元素上
+		> <div v-bind:style="[styleObj,styleObj1]">我是多个样式对象</div>		
+		> data(){return{ 
+			styleObj{color:'blue',fontSize:'0.4rem',lineHeight:'0.5rem'},
+			styleObj1{borderBottom:'0.02rem solid green'}
+		 }}
+	* 多重值
+		> 2.3.0+及以上才支持
+		> <div :style="{display:['-webkit-box','-ms-flexbox','flex']}">我是style内联的多重值</div>
+			> 当浏览器支持不带前缀的flex时，内联样式显示为 <div style="display:flex">我是style内联的多重值</div>	
 
 
 
