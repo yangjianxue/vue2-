@@ -1,6 +1,6 @@
 # vue2-
 vue2中遇到的问题
-> 关于 render:comp => comp(App) 和 components:{App} 的区别？
+> 关于 render:h => h(App) 和 components:{App} 的区别？
 > > 注：App是组件
 ```
 import App from "../componendts/App.vue";
