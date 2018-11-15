@@ -266,9 +266,8 @@ export default{
 		> 2.3.0+及以上才支持
 		```
 		<div :style="{display:['-webkit-box','-ms-flexbox','flex']}">我是style内联的多重值</div>
-		```
 		 > 当浏览器支持不带前缀的flex时，内联样式显示为 <div style="display:flex">我是style内联的多重值</div>	
-
+		```
 
 
 
