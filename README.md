@@ -324,7 +324,74 @@ export default{
 	* 总结：
 		* v-if切换开销高，如果运行是条件很少改变时，推荐使用
 		* v-show初始渲染开销高，如果切换非常频繁时，推荐使用
+## 列表渲染
 
+* 语法
+```
+<ul>
+	<li v-for="(value,index) in/of obj/arr" v-bind:key="index">
+		<span>value:当前项；</span>
+		<span>index:索引；</span>
+		<span>key:唯一且必须的属性，以便跟踪每个节点点身份，从而重用和重新排序现有元素</span>
+		{{value/value.name}}
+	</li>
+</ul>
+```
+```
+//测试数据
+return{
+	datas:[
+		{
+		'name':'Jane',
+		'age':19,
+		'sex':'male'
+		},
+		{
+		'name':'Jane1',
+		'age':20,
+		'sex':'female'
+		},
+	],
+	users:{
+		'name':'Jane2',
+		'age':55,
+		'sex':'male'
+	}
+}
+```
+
+ * v-for="value of obj"
+```
+<ul>
+	<li v-for="(value,index) of obj" :key="index">
+		<span>value:当前项；</span>
+		<span>index:索引；</span>
+		<span>key:唯一且必须的属性，以便跟踪每个节点点身份，从而重用和重新排序现有元素</span>
+		{{value/value.name}}
+	</li>
+</ul>
+```
+```
+复习内容Object.entries/Object.keys
+<ul>
+	<li v-for="(value,index) of Object.entries(datas)" :key="index">
+		<span>value:当前项；</span>
+		<span>index:索引；</span>
+		<span>key:唯一且必须的属性，以便跟踪每个节点点身份，从而重用和重新排序现有元素</span>
+		{{value/value.name}}
+	</li>
+</ul>
+* Object.entries(datas) 
+datas : value   <==>  ["0",{
+			'name':'Jane',
+			'age':19,
+			'sex':'male'
+		       }]
+users : value   <==>  ['name','Jane2']
+* Object.keys(datas)
+datas : value  <==>  0 
+users : value  <==>  name(键名)
+```
 
 ### vue2中遇到的问题
 > VUE实例中加载组件用 render
