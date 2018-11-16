@@ -392,6 +392,67 @@ users : value   <==>  ['name','Jane2']
 datas : value  <==>  0 
 users : value  <==>  name(键名)
 ```
+## 关于数组的方法
+### 变异方法（改变原数组的方法）->他们会触发视图更新
+* push()
+* pop()
+* unshift()
+* shift()
+* splice()
+* sort()
+* reverse()
+### 替换数组
+* filter()--过滤数组
+* concat() --数组链接
+* slice()--截取字符串
+* split()--将字符串拆分成数组
+* join()---将数组拆分成字符串
+* toString()--将数组转换成字符串
+### vue 检测不到的数组变动
+* 利用索引直接设置一个项时，如 vm.items[indexOfItem] = newValue
+* 修改数组点长度时，如 vm.items.length = newLength
+	```
+	var vm = new Vue({
+	  data: {
+	    items: ['a', 'b', 'c']
+	  }
+	})
+	vm.items[1] = 'x' // 不是响应性的
+	vm.items.length = 2 // 不是响应性的
+	```
+### 解决 vue 检测不到的数组变动
+* 第一类问题
+	```
+	// 第一种解决问题Vue.set
+	Vue.set(vm.items, indexOfItem, newValue)
+	Vue.set(要加到哪个数组, 索引, 新的value值)
+	// 第二种解决问题 Array.prototype.splice
+	vm.items.splice(indexOfItem, 1, newValue)
+	vm.items.splice(要加到哪个数组, 索引, 新的value值)
+	//第三种解决问题 vm.$set 是全局方法 Vue.set 的一个别名
+	vm.$set(vm.items, indexOfItem, newValue)
+	vm.$set(要加到哪个数组, 索引, 新的value值)
+	```
+* 第二类问题
+	```
+	vm.items.splice(newLength)
+	```
+### 对象属性的添加或删除
+* 添加一个新属性 到 userProfile对象中
+	```
+	Vue.set(vm.userProfile, 'age', 27)
+	//或者(组件中)
+	vm.$set(vm.userProfile, 'age', 27)
+	```
+* 添加多个新属性 Object.assign() 或者 _.extend()
+	```
+	//Object.assign（target, ...sources）
+	//方法用于将所有可枚举属性的值从一个或多个源对象复制到目标对象。它将返回目标对象。
+	vm.userProfile = Object.assign({}, vm.userProfile, {
+	  age: 27,
+	  favoriteColor: 'Vue Green'
+	})
+	```
 
 ### vue2中遇到的问题
 > VUE实例中加载组件用 render
