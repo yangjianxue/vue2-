@@ -276,7 +276,54 @@ export default{
 		<div :style="{display:['-webkit-box','-ms-flexbox','flex']}">我是style内联的多重值</div>
 		 > 当浏览器支持不带前缀的flex时，内联样式显示为 <div style="display:flex">我是style内联的多重值</div>	
 		```
+## 条件渲染
+* v-if /v-else
 
+	> v-for 与 v-if 不推荐同时使用，因为两者一起使用时，v-for 比 v-if优先级高
+	```
+	<h1 v-if="show">显示</h1>
+	<h1 v-else>不显示</h1>
+	```	
+* 用 key 可以阻止元素的高效复用
+	> //动态切换登陆方式
+	```
+	//无 key 时
+	<div v-if="loginType">
+		<label for="userName">请输入用户名:</label>
+		<input type="text" id="userName" placeholder="请输入用户名">
+	</div>
+	<div v-else>
+		<label for="email">请输入邮箱:</label>
+		<input type="text" id="email" placeholder="请输入邮箱">
+	</div>
+	<input class="btn" type="button" value="toggleLoginType" v-on:click="toggleLoginType">
+
+	//当两个 template 标签中的标签相同时，vue会默认点高效复用，只切换label/input标签中不同的部分，两个标签不会被重新渲染，这样导致的问题就是，当在userName中输入内容，然后切换登陆方式后，在userName中输入的内容依然会被保存，
+	```
+	```
+	添加 key 后
+	<div v-if="loginType">
+		<label for="userName">请输入用户名:</label>
+		<input type="text" id="userName" placeholder="请输入用户名">
+	</div>
+	<div v-else>
+		<label for="email">请输入邮箱:</label>
+		<input type="text" id="email" placeholder="请输入邮箱" key="userNameKey">
+	</div>
+	<input key="emailKey" class="btn" type="button" value="toggleLoginType" v-on:click="toggleLoginType">
+
+	//为两个 input 添加 key 后,每次切换，输入框都会被重新渲染，不会保存之前输入的内容
+	```
+* v-show
+	> v-show 不支持作用在 template 标签上，也不支持 v-else
+	> v-show 只是简单的切换元素的 css属性 display
+
+* v-if 与 v-show 区别
+	> v-if 在切换过程中会销毁和重建条件块，（惰性：因为如果在初始渲染条件为假时，条件块不会被渲染，知道条件第一次变为真时，才会开始渲染条件块
+	> v-show 不管初始条件是什么，都会被渲染，且只是单纯点切换display
+	> 总结：
+		* v-if切换开销高，如果运行是条件很少改变时，推荐使用
+		* v-show初始渲染开销高，如果切换非常频繁时，推荐使用
 
 
 ### vue2中遇到的问题
