@@ -4,8 +4,8 @@
 
 # VUE模板
 ```
-<template></template>    ----html
-<script></script>		 ----js
+<template></template>    ----html (template是容器但不是标签，template中有且只有一个根标签)
+<script></script>	 ----js
 <style></style>          ----css
 ```
 
