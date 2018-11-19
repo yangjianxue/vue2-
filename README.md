@@ -38,10 +38,58 @@ export default{
 	但当需要在数据变化时执行异步或者开销较大的操作时，watch 选项提供了一个更通用的方法，来相应数据点变化(即常和axios连用)）
 }
 ```
+### vue-router 模板总结
+```
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import Home from "../app/home";
+import PageOne from '../app/pageOne';
+import PageOne_one from "../app/pageOne_one";
+import PageOne_two from '../app/pageOne_two';
 
+Vue.use(VueRouter);
 
+export default new VueRouter({
+    //mode 运行空白待解决
+    mode:"history"(默认值)|"hash" (浏览器环境) | "abstract" (Node.js 环境),
+    linkActiveClass:'active',  //全局设置选中后的router-link样式
+    routes:[
+        {
+            path:'/',
+            name:'home',   //推荐这样设置
+            component:Home
+        },
+        {
+            path:'/pageOne',
+            name:'pageOne',
+            component:'PageOne',
+            redirect:'/pageOne/pageOne_two'  //默认进入页面后重定向到 pangeOne_two
+        //配置二级路由
+        children:[
+	    {
+		path:'pageOne_one',
+		name:'pageOne_one',
+		component:PageOne_one
+	    },
+	    //目前常用传参方法
+	    {
+		path:'/pageTwo/:count/:obj.name/:isTrue',
+		name:'pageTwo',
+		component:PageTwo
+	     }
+        ]
+        }
 
-
+    ]
+})
+//路由调用
+<li><router-link :to="{name:'pageTwo',params:{count:101,obj:obj,isTrue}}">go pageTwo</router-link></li>
+//路由读取
+<p>{{$route.params.count}}</p>
+<p>{{$route.params.obj.name}}</p>
+<p>{{$route.params.obj.age}}</p>
+<p>{{$route.params.isTrue}}</p>
+```
 
 # 模板语法
 *	文本
