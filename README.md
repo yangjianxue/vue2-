@@ -38,7 +38,7 @@ export default{
 	但当需要在数据变化时执行异步或者开销较大的操作时，watch 选项提供了一个更通用的方法，来相应数据点变化(即常和axios连用)）
 }
 ```
-### vue-router 模板总结
+# vue-router 模板总结
 ```
 import Vue from 'vue';
 import VueRouter from 'vue-router';
