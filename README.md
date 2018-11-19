@@ -453,7 +453,111 @@ users : value  <==>  name(键名)
 	  favoriteColor: 'Vue Green'
 	})
 	```
+## vue-router
+* 安装
+```
+//对于 TypeScript 用户来说，vue-router@3.0+ 依赖 vue@2.5+，反之亦然
+npm i vue-router --save-dev
+```
+* 引用
+```
+import VueRouter from 'vue-router';
 
+Vue.use(VueRouter)
+```
+* 配置路由文件
+```
+var router = new VueRouter({
+	//path是访问路径、是自己配置的（名字随意一点啦，不过最好还是和加载的组件有关系啦）
+	//（/ 是根目录，也就是index.html;/home ，就是需要在index.html/home访问改组件，
+	//相应的在使用router-link的时候要与自己配置的名字一致
+	// index.html/pageO 就是访问pageOne组件）
+	//component:是需要加载的组件
+	// path:'/',
+	// component:Home
+	routers:[
+		{path:'./',component:Home},
+		{path:'./pageO',component:pageOne}
+	]
+})
+注入路由
+
+new Vue({
+	const app = new Vue({
+	router,
+    el:'#root',
+    data:{
+        name:'jane'
+    },
+    render:h => h(index)
+})
+```
+* 视图加载的位置
+```
+<router-view></router-view>
+```
+* 整理后的配置文件
+```
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+//路由组件
+import Home from '../app/home';
+import pageOne from '../app/pageOne'
+
+Vue.use(VueRouter)
+
+export default new VueRouter({
+	routes:[
+		{path:'/',name:'home',component:'Home'},
+		{path:'/pageO',name:'pageOne',component:'pageOne'}
+	]
+})
+```
+
+* 路由跳转
+```
+//可以简单的理解为a标签 to 是需要跳转的组件
+<router-link to="pageOne">go pageOne</router-link>	
+<router-link v-bind:to="pageOne">go pageOne</router-link>	
+<router-link :to="pageOne">go pageOne</router-link>	      //推荐
+<router-link path="{path:pageOne}">go pageOne</router-link>	
+
+```
+
+
+* 路由嵌套
+ * 在路由配置里需要加入 children 来配置 path 和 component
+ * 每一层路由都需要有一个视图区域(router-view) , 子视图属于谁就在谁下面（要在哪个页面里显示就在哪个里面加router-view）
+ * 路由默认加载项（重定向） ： redirect
+
+
+ * 路由传参
+```
+router.js文件中：
+path:'/pageTwo/:count',
+
+//第一种方式 ---比较方便好用且常用
+<li><router-link :to="{name:'pageTwo',params:{count:101,obj:{name:'Jane'}}}">go pageTwo</router-link></li>
+//读取路由参数
+单个参数：{{$route.params.count}}
+对象参数（对象可以定义在data中）：{{$route.params.obj.name}}
+//url显示为
+/pageTwo/101
+
+//第二种方式
+<li><router-link :to="{path:'/pageTwo',query:{count:100}}">go pageTwo</router-link></li>
+//读取路由参数
+{{route.params}}
+//url显示为
+/pageTwo?count=100
+
+** 缺点：在组件中使用 $route 会使之与其对应路由形成高度耦合，从而使组件只能在某些特定的 URL 上使用，限制了其灵活性。
+ ```
+* 改进后的方法
+```
+使用 props 将组件和路由解耦：
+
+```
 ### vue2中遇到的问题
 > VUE实例中加载组件用 render
 > VUE模板中加载组件用 components
