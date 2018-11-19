@@ -2,7 +2,7 @@
 ### Vue学习笔记
 
 
-# VUE模板
+# VUE组件模板
 ```
 <template></template>    ----html (template是容器但不是标签，template中有且只有一个根标签)
 <script></script>	 ----js
@@ -23,7 +23,7 @@ var vm = new Vue({
 })
 ```
 
-# VUE模板 实例的书写规范
+# VUE组件模板 实例的书写规范
 ```
 export default{
 	name:''     	//模板实例的名字
