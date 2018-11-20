@@ -19,23 +19,24 @@ var vm = new Vue({
 	watch:{}           	-------侦听属性
 	render:h => h(根组件名字)-------加载根组件（此处不可用components加载组件）
 	（侦听属性：一般不推荐：推荐使用计算属性代替，
-	但当需要在数据变化时执行异步或者开销较大的操作时，watch 选项提供了一个更通用的方法，来相应数据点变化(即常和axios连用)）
+	但当需要在数据变化时执行异步/开销较大的操作时，watch 选项提供了一个更通用的方法，来相应数据点变化(即常和axios/表单输入绑定连用连用)）
 })
 ```
 
 # VUE组件模板 实例的书写规范
 ```
 export default{
-	name:''     	//模板实例的名字
+	name:''     	//模板实例的名字(主要与router一起用)
 	data:{},    	//模板实例的属性数据
 	methods:{}, 	//模板实例的方法集合
 	computed:{}, 	//模板实例点计算属性方法集合   
-	watch:{}        //侦听属性
+	watch:{},       //侦听属性
+	（侦听属性：一般不推荐：推荐使用计算属性代替，
+	但当需要在数据变化时执行异步/开销较大的操作时，watch 选项提供了一个更通用的方法，来相应数据点变化(即常和axios/表单输入绑定连用连用)）
 	components：{
 	    子组件名字,子组件名字1
 	}               //模板里加载组件(此处不可用render加载组件)
-	（侦听属性：一般不推荐：推荐使用计算属性代替，
-	但当需要在数据变化时执行异步或者开销较大的操作时，watch 选项提供了一个更通用的方法，来相应数据点变化(即常和axios连用)）
+	
 }
 ```
 # vue-router 模板总结
@@ -123,7 +124,7 @@ export default new VueRouter({
 	//简写 (直接省略v-bind) 	
 		<p :class="{redClass:isMyClass,blueClass:!isMyClass}" :title="show">{{show}} 
 	```
-##	条件判断
+## 条件判断
 * v-if   :	相当于if
 	```
 	<p v-if="show">我是v-if 为true 时能被看到</p>
@@ -133,16 +134,18 @@ export default new VueRouter({
 	<p v-else>我是v-if 为false 时能被看到</p>
 	```
 
-##	监听DOM事件
+## 监听DOM事件
 * v-on 	 : 参数是监听点事件名称
 	```
 	<input type="button" value="改变颜色" v-on:click="changeColor">
 	changeColor 定义在methods中（json格式）
-	//简写 （将v-on简写成@）
-		<input type="button" value="改变颜色" @:click="changeColor">
+	//简写 （将v-on:简写成@）
+		<input type="button" value="改变颜色" @click="changeColor">
 	```
-##	修饰符
+	
+## 修饰符
 ```
+
 * .prevent    <==>  event.preventDefault()
 	<form v-on:submit.prevent="onSubmit"></form>
 ```
@@ -180,8 +183,9 @@ export default new VueRouter({
 	<p>{{reverseName1()}}</p>
 	```
 	> 方法与计算属性的区别：
-		> 计算属性 ：是基于他们的依赖进行缓存的，只要相关依赖不改变，多次访问计算属性会立即返回之前的计算结果
+		> 计算属性 ：是基于他们的依赖进行缓存的，只要相关依赖不改变，多次访问计算属性不会重新计算会立即返回之前的计算结果
 		> 方法 ：是只要触发重新渲染时，调用方法 总会再次执行函数
+		* 注意：计算属性调用不需要加括号，方法调用需要加括号
 
 ## 侦听器（侦听属性）
 * watch 
@@ -248,9 +252,82 @@ export default new VueRouter({
 	}
 </script>
 ```
-	> watch 优点：(未完待续)
-		>	当需要在数据变化时执行异步或者开销较大的操作时，watch 选项提供了一个更通用的方法，来相应数据点变化(即常和axios连用)
+* watch 优点：(未完待续)
+ * 当需要在数据变化时执行异步/开销较大的操作时，watch 选项提供了一个更通用的方法，来相应数据点变化(即常和axios/表单输入绑定连用)
+```
+//input绑定值和watch监听小例子
+<p>如果输入与显示不同时进行，需要延时显示</p>
+<input type="text" v-model="delayShowMsg">
+<p>{{ delayShowData }}</p>
 
+watch:{
+	delayShowMsg:function(data){
+		var timer = setTimeout( () => {
+			this.delayShowData = data
+		},
+		//1000是我们为判定用户停止输入等待的毫秒数（即需要1000毫秒去显示输入的内容）
+		1000)
+
+		//搜索框原理(其实应该用axios)
+		// setTimeout(()=>{
+		// 	$.ajax({
+		// 		url:'',
+		// 		data:data,
+		// 		success:(res)=>{
+		// 			this.delayShowData = res;
+		// 		}
+		// 	})
+		// },1000)
+	}
+}
+```
+## 表单输入与绑定
+ * v-model :双向数据绑定。
+ ```
+ //注意：v-model绑定的 msgInput 必须在实例组件的 data 选项中声名初始值
+<input type="text" v-model="msgInput">   //输入绑定值
+<p>{{ msgInput }}</p>                    //获取绑定值
+ ```
+ * 监听数据
+ ```
+data(){
+	return{
+		msg:'我是表单输入与绑定组件',
+		msgInput:''
+	}
+},
+watch:{
+	//msgInput即双向绑定的值，函数的参数data就是获取到实时输入的值
+	msgInput:function(data){
+		if(data == '请输入'){
+			console.log('输入内容')	
+		}
+	}
+}
+ ```
+* radio/checkbox 必须指定 value ,v-model可以绑定 checked/name
+* checkBox--多选时绑定值是数组
+* select：第一个默认选项推荐加一个disabled 使其不可选中，因为ios选择第一个默认选项时不会触发change 事件
+* select--多选时绑定值也是数组 (多选属性 multiple)
+## 修饰符
+* .lazy 
+```
+<input type="text" v-model.lazy="lazyTest">
+<p>{{ lazyTest }}</p>
+//当input 失去焦点时，p标签里才会获取到输入的内容
+```
+* .number
+```
+<input type="text" v-model.number="numTest">
+<p>{{ numTest }} --- {{ typeof numTest}}</p>   // typeof numTest --返回为number
+//强制输入的内容为 number 类型，如果输入非 number 类型时，输入的内容自动删除
+```
+* .trim
+```
+<input type="text" v-model.trim = 'trimTest'>
+<p>{{ trimTest }}</p>
+//去掉收尾空格
+```
 
 ## class和style绑定
 * 因为class 和 style 都是属性，所以可以使用v-bind做处理
@@ -501,6 +578,13 @@ users : value  <==>  name(键名)
 	  favoriteColor: 'Vue Green'
 	})
 	```
+### 显示过滤/排序的结果
+```
+[].filter(function(val){
+	console.log(val)
+})
+```
+	
 ## vue-router
 * 安装
 ```
