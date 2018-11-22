@@ -8,6 +8,14 @@
 <script></script>	 ----js
 <style></style>          ----css
 ```
+## 知识点 查漏补缺
+* script --
+  * import 组件名 from 子组件存放的地址  ： 当前组件导入 子组件 
+    * 还需要在 components 里注入 子组件，然后 在 template标签中就可以使用子组件名的标签了
+* style --
+  * scoped : 样式只在当前组件内生效
+  * lang: less/scss :支持less/sass语法
+  
 
 # VUE实例
 ```
@@ -92,6 +100,7 @@ export default new VueRouter({
 <p>{{$route.params.isTrue}}</p>
 ```
 
+  
 # 模板语法
 *	文本
 	>	Mustache语法 （双花括号）
@@ -334,7 +343,7 @@ watch:{
 
 	### 绑定class 
 
-	* 处理动态class 
+	* 处理动态class (利用计算属性 computed)
 
 	* 对象语法 v-bind:class="{class名:数据属性,'class名':数据属性}"
 	> class名可以加引号或者不加引号
@@ -363,6 +372,10 @@ watch:{
 		}
 		```
 	* 数组语法 
+		* 数组语法
+		```
+		<div :class=[{redClass:show},'text-danger']>数组语法</div>
+		```
 		* 为标签添加三目计算后的class
 		```
 		<div :class="[show ? 'redClass' :'blueClass','text-danger']">为div的class添加三目</div>
@@ -584,7 +597,14 @@ users : value  <==>  name(键名)
 	console.log(val)
 })
 ```
-	
+
+## 组件传参 
+ ### props
+ * 父组件 给 子组件 传参 用 ：Pass props
+ * 子组件 给 父组件 传参 用 ：Emit Events
+ 
+
+
 ## vue-router
 * 安装
 ```
