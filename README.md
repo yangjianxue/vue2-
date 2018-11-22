@@ -602,6 +602,56 @@ users : value  <==>  name(键名)
  ### props
  * 父组件 给 子组件 传参 用 ：Pass props
  * 子组件 给 父组件 传参 用 ：Emit Events
+ ```
+ //在父组件中：
+ /*
+ * 1、需要import 导入子组件
+ * 2、需要在script中 的 components 注入 子组件
+ * 3、需要在 template中 调用子组件 将需要传递给子组件的 值 以属性的形式传递
+ */
+ <template>
+	<div>
+		<p>父组件</p>
+		<Son textProps='我是测试父组件向子组件传值'/>
+	</div>
+</template>
+<script>
+	import Son from '../component/Son'
+	export default{
+		name:'home',
+		data(){
+			return{
+				
+			}
+		},
+		components:{
+			Son
+		}
+	}
+</script>
+//在子组件中
+/*
+* 1、需要在子组件中的 script中 新增一个porps 与data同级
+* 2、需要在props中以数组的方式 接收 在 父组件调用子组件时传递的自定义 属性名字(且是字符串形式)
+* 3、在子组件中的 template 中，以{{属性名}} 的形式调用
+*/
+<template>
+	<div>
+		我是子组件{{textProps}}
+	</div>
+</template>
+<script>
+	export default{
+		name:'son',
+		data(){
+			return{
+				msg:"我是子组件"
+			}
+		},
+		props:['textProps']
+	}
+</script>
+ ```
  
 
 
