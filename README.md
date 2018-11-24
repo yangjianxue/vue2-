@@ -608,11 +608,18 @@ users : value  <==>  name(键名)
  * 1、需要import 导入子组件
  * 2、需要在script中 的 components 注入 子组件
  * 3、需要在 template中 调用子组件 将需要传递给子组件的 值 以属性的形式传递
+ * 4、动态改变的值需要在调用子组件时，使用v-bind或者（:）
  */
  <template>
 	<div>
 		<p>父组件</p>
-		<Son textProps='我是测试父组件向子组件传值'/>
+		<input type='text' v-model="iptTxt"/>
+		<Son 
+			textProps='我是测试父组件向子组件传递静态值' 
+			:modifTxt="modifyTxt"
+			:inputTxt='iptTxt'/>
+		<button @click="changeTxt">改变传递给子组件的值</button>
+		
 	</div>
 </template>
 <script>
@@ -621,11 +628,17 @@ users : value  <==>  name(键名)
 		name:'home',
 		data(){
 			return{
-				
+				modifyTxt:'点击父组件的改变事件，看我改变后，子组件中的值是否改变',
+				iptTxt:''
 			}
 		},
 		components:{
 			Son
+		},
+		methods:{
+			changeTxt(){
+				this.modifyTxt = '我是父组件改变后的文本值'
+			}
 		}
 	}
 </script>
@@ -637,7 +650,18 @@ users : value  <==>  name(键名)
 */
 <template>
 	<div>
-		我是子组件{{textProps}}
+		<h2>我是子组件</h2>
+		<ul>
+			<li>
+				我是父组件传递给子组件的静态值:<span>{{textProps}}</span>
+			</li>
+			<li>
+				我是通过父组件改变事件传递的值:<span>{{modifTxt}}</span>
+			</li>
+			<li>
+				我是通过父组件输入后传递给子组件的值：<span>{{inputTxt}}</span>
+			</li>
+		</ul>
 	</div>
 </template>
 <script>
@@ -648,10 +672,16 @@ users : value  <==>  name(键名)
 				msg:"我是子组件"
 			}
 		},
-		props:['textProps']
+		props:['textProps','modifTxt','inputTxt']
 	}
 </script>
  ```
+  ### props 数据传递类型限制（验证）
+   * 数据类型验证
+   * 多数据类型验证
+   * 必选项
+   * 默认值
+   * obj/arr数据类型的默认值
  
 
 
