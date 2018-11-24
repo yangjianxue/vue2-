@@ -602,6 +602,7 @@ users : value  <==>  name(键名)
  ### props
  * 父组件 给 子组件 传参 用 ：Pass props
  * 子组件 给 父组件 传参 用 ：Emit Events
+### 父组件 给 子组件 传值
  ```
  //在父组件中：
  /*
@@ -682,7 +683,120 @@ users : value  <==>  name(键名)
    * 必选项
    * 默认值
    * obj/arr数据类型的默认值
- 
+```
+//默认接收父组件传过来的值（没有任何限定）
+// props:['textProps','modifTxt','inputTxt']
+// 添加
+props:{
+    //null可以匹配任何类型
+    //可选类型：Number/String/Boolean/Array/Object/Date/Function/Symbol/自定义函数
+    propA:Number,
+    //多数据类型验证
+    propB:[String,Boolean],
+    //必选项
+    propC:{
+      type:String,
+      reuqired:true
+     },
+    //默认值
+    propD:{
+      type:Object,
+      //对象或数组默认值必须是从函数返回的
+      default:function(){
+         return {msg:'hello'}
+      },
+      //自定义验证函数
+      propF:{
+        validator:function(value){
+	  //propF的值必须匹配下列字符串中的一个
+	  return ['success','warning','danger'].indexOf(value) !== -1
+	}
+      }
+    }
+    
+}
+```
+## 父组件 给 子组件 传值 
+* $emit
+```
+//需求：在父组件(fatherComp)中输入一个数值并传递给子组件，子组件(childComp)通过 *2的运算后展示在当前组件中，并且返回给父组件并显示
+//父组件
+<template>
+    <div>
+       <p>{{msg}}</p>
+       <input type="text" v-model='iptNum'/>
+       <p>我是子组件计算后传回来的值 ：{{result}}</p>
+       <hr />
+       //@childEvent 是子组件自定义的事件，通过自定义事件调用getNum方法,方法中接收的参数就是子组件传回来的内容
+       <ChildComp :childNum = "parseNum" @childEvent="getNum"/>
+    </div>
+</template>
+<script>
+    import ChildComp from './childComp';
+    export default{
+        name:'fatherComp',
+	data(){
+	    return{
+	        msg:'我是父组件',
+		iptNum:0,
+		result:0
+	    }
+	},
+	computed:{
+	    //因为输入框输入的内容默认是字符串，而子组件中接收的值固定为Number类型，所以需要
+	    //类型转换，否则浏览器console报错，并且传给子组件的值要改成这个计算后的值
+	    parseNum(){
+	        return this.iptNum - 0
+	    }
+	}
+	components:{
+	    ChildComp
+	},
+	methods:{
+	    getNum(data){
+	        this.result = data;
+	    }
+	}
+    }
+</script>
+//子组件
+<template>
+    <div>
+        <P>{{msg}}</p>
+	<p>我是通过父组件传递过的值：{{childNum}}</p>
+	<p>我是子组件计算后的值：{{childCompute}}</p>
+	<button @click="sendNum">将计算后的值返回给父组件</button>
+    </div>
+</template>
+<script>
+    export default{
+        name:'childComp',
+	data(){
+	    return{
+	        msg:'我是子组件'
+	    }
+	},
+	props:{
+	    childNum:{
+	        type:Number,
+		default:2
+	    }
+	},
+	computed:{
+	    childCompute(){
+	        return this.childNum * 2
+	    }
+	},
+	methods:{
+	   sendNum(){
+	       //this.$emit('自定义的事件名字',返回给父组件的值)
+	       //在父组件中将自定义的事件调用
+	       this.$emit('childEvent',this.childCompute)
+	   } 
+	}
+    }
+</script>
+```
 
 
 ## vue-router
@@ -761,6 +875,39 @@ export default new VueRouter({
  * 在路由配置里需要加入 children 来配置 path 和 component
  * 每一层路由都需要有一个视图区域(router-view) , 子视图属于谁就在谁下面（要在哪个页面里显示就在哪个里面加router-view）
  * 路由默认加载项（重定向） ： redirect
+ ```
+ export default new VueRouter({
+  routes:[
+    //配置根路径，redirect在重定向到对应页面路径（一级导航）
+    {
+      path:'/',
+      redirect:'/home'  //进入页面后首次进入 home 页
+      //redirect:'/pageOne' //进入页面后首次进入 pageOne 页
+    },
+    {
+       path:'./home',
+       //name：就是每个子组件中定义的name,
+       name:'home',
+       //Home：是import 导入子组件时 定义的别名
+       component:Home
+    },
+    {
+       path:'/pageOne',
+       name:'pageOne',
+       component:PageOne,
+       redirect:'/pageOne/pageone_two',
+       children:[
+          {
+	      path:'pageOne_one',
+	      name:'pageOne_one',
+	      component:PageOne_one
+	  }
+	  {...}
+       ]
+    }
+  ]
+ })
+ ```
 
 
  * 路由传参
