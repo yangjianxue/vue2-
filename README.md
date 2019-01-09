@@ -729,7 +729,7 @@ props:{
        <p>我是子组件计算后传回来的值 ：{{result}}</p>
        <hr />
        //@childEvent 是子组件自定义的事件，通过自定义事件调用getNum方法,方法中接收的参数就是子组件传回来的内容
-       <ChildComp :childNum = "parseNum" @childEvent="getNum"/>
+       <ChildComp :childNum = "parseNum" @childEvent="getNum($event)"/>
     </div>
 </template>
 <script>
