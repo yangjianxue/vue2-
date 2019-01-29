@@ -958,6 +958,39 @@ path:'/pageTwo/:count',
 使用 props 将组件和路由解耦：
 
 ```
+ * 路由守卫（路由拦截）
+```
+一、路由的钩子函数
+    1、全局钩子：（一般不用）
+        使用 router 的实例对象进行注册：当一个导航触发时，全局的 beforeEach 钩子按照创建顺序调用。购租是异步解析执行，此时导航在所有钩子 resolve 完之前一直处于 等待中
+        三个参数：
+            to:router --即将要进入的目标
+	    from:router --当前导航正要离开的路由
+	    next:function --一定要调用该方法来 resolve 这个钩子。执行效果依赖 next 方法的调用参数
+		next():进行管道中的下一个钩子
+		next(fasle) ： 终端当前的导航。重置到 from 路由对应的地址
+		next('/') :当前导航被中断，重定向到另一个新的导航  [next({path:'/'}) 此方法实践中有问题，还未解决]
+		    例如：
+			const router = new VueRouter({...})
+			router.beforeEach((to,from,next) =>{...})
+    2、路由的独享钩子：
+        在路由的配置项中定义：beforeEnter 属性;
+            例如：
+		{
+			path:'/index',
+			component:Index,
+			beforeEnter:(to,from,next) =>{...}
+		}
+    3、组件内的路由钩子(和data属性同级)：
+        beforeRouterEnter: 路由跳转之前执行，不能获取 this,组件实例还没有创建；
+	    注：虽然此时不可访问 this ,但是可以通过回调给 next来访问组件实例，例如：
+	        beforeRouterEnter(to,from,next){
+		    next(vm =>{ //可通过 'vm' 访问组件实例 })
+		}
+	beforeRouterUpdate: 路由重新跳转之前，该方法在组件复用时调用，该钩子函数中可以发访问组件的实例 this
+	beforeRouterLeave : 离开该组件的对应路由时调用，可以访问实例 this,一般在用户未保存信息时，不允许跳转相应的路由，可用next(false)阻止；
+```
+ 
 ### vue2中遇到的问题
 > VUE实例中加载组件用 render
 > VUE模板中加载组件用 components
